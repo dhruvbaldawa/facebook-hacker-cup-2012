@@ -55,6 +55,8 @@ if __name__ == '__main__':
                 if f_width * len(s) > space_left:
                     l.append(word)
                     space_left = line_width - (len(s) * f_width)
+                elif l[-1] not None and l[-1] > space_left:
+                    break
                 else:
                     try:
                         e = l.pop() + " " + word
