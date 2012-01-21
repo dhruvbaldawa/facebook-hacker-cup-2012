@@ -47,21 +47,22 @@ if __name__ == '__main__':
         #font_width = w/len(s[0]
         #max_font = font_width
         sizes = []
-        for f_width in range(1, w/len(s[0])):
+        for f_width in range(1, w):
             l = []
-            space_left = f_width
             line_width = w/f_width
+            space_left = line_width
             for word in s:
                 if f_width * len(s) > space_left:
                     l.append(word)
                     space_left = line_width - (len(s) * f_width)
                 else:
                     try:
-                        l.append(l.pop() + " " + word)
+                        e = l.pop() + " " + word
+                        l.append(e)
                         space_left = space_left - ((len(s) + 1) * f_width)
                     except:
                         l.append(word)
-                        space_left = line_width - (len(s) * f_width)
+                        space_left = space_left - (len(s) * f_width)
                 
             max_w = len(max(l, key=len)) * f_width
             max_h = len(l) * f_width
@@ -69,5 +70,5 @@ if __name__ == '__main__':
                 sizes.append(f_width)
         
         index += 1
-        print "Case #%s: %s %s" % (index, max(sizes), "l")
+        print "Case #%s: %s" % (index, max(sizes))
     pass
