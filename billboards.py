@@ -44,43 +44,30 @@ if __name__ == '__main__':
         # Process
         w = int(w)
         h = int(h)
-        font_width = 1
-        max_font = font_width
-        while True:    
-            font_width += 1
+        #font_width = w/len(s[0]
+        #max_font = font_width
+        sizes = []
+        for f_width in range(1, w/len(s[0])):
             l = []
-            line_width = w/font_width
-            line_index = 0
-            space_left = line_width
-            
-            breaked = False
-            
+            space_left = f_width
+            line_width = w/f_width
             for word in s:
-                if len(word) * font_width > line_width:
-                    breaked = True
-                    break
-                    
-                if (font_width * len(word)) > space_left:
-                    line_index += 1
+                if f_width * len(s) > space_left:
                     l.append(word)
-                    space_left = line_width - font_width * len(word)
+                    space_left = line_width - (len(s) * f_width)
                 else:
                     try:
-                        l[line_index] = l[line_index] + " " + word
-                        space_left = space_left - font_width * (len(word) + 1)
+                        l.append(l.pop() + " " + word)
+                        space_left = space_left - ((len(s) + 1) * f_width)
                     except:
                         l.append(word)
-                        space_left = space_left - font_width * len(word)
-            
-            if not breaked:
-                max_width = len(min(l, key=len))
-                max_height = len(l) * font_width
-            
-            if not breaked and max_width <= w and max_height > h:
-                break
-            else:
-                max_font = font_width
+                        space_left = line_width - (len(s) * f_width)
+                
+            max_w = len(max(l, key=len)) * f_width
+            max_h = len(l) * f_width
+            if max_w <= w and max_h <= h:
+                sizes.append(f_width)
         
         index += 1
-        print "Case #%s: %s %s" % (index, max_font, l)
+        print "Case #%s: %s %s" % (index, max(sizes), "l")
     pass
