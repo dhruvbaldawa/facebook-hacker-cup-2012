@@ -45,7 +45,7 @@ if __name__ == '__main__':
         w = int(w)
         h = int(h)
         font_width = 1
-        
+        max_font = font_width
         while True:    
             font_width += 1
             l = []
@@ -53,8 +53,14 @@ if __name__ == '__main__':
             line_index = 0
             space_left = line_width
             
+            breaked = False
+            
             for word in s:
-                if (len(s) + 1) > space_left:
+                if len(word) * font_width > line_width:
+                    breaked = True
+                    break
+                    
+                if (font_width * len(word)) > space_left:
                     line_index += 1
                     l.append(word)
                     space_left = line_width - font_width * len(word)
@@ -66,12 +72,15 @@ if __name__ == '__main__':
                         l.append(word)
                         space_left = space_left - font_width * len(word)
             
-            max_width = len(min(l, key=len))
-            max_height = len(l) * font_width
+            if not breaked:
+                max_width = len(min(l, key=len))
+                max_height = len(l) * font_width
             
-            if max_height > h or max_width > w:
+            if not breaked and max_width <= w and max_height > h:
                 break
+            else:
+                max_font = font_width
         
         index += 1
-        print "Case #%s: %s %s" % (index, font_width, l)
+        print "Case #%s: %s %s" % (index, max_font, l)
     pass
