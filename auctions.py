@@ -28,7 +28,7 @@ Constraints
 """
 import sys
 def preference(P, W, i, j):
-    if (P[i] < P[j] and W[i] >= W[j]) or (P[i] <= P[j] and W[i] < W[j]):
+    if (P[i] < P[j] and W[i] <= W[j]) or (P[i] <= P[j] and W[i] < W[j]):
         return i
     else:
         return j
@@ -39,7 +39,6 @@ def parse_file():
         yield line
     
 if __name__ == '__main__':
-    sentence = "HACKERCUP"
     index = -1
 
     for line in parse_file():
@@ -73,13 +72,16 @@ if __name__ == '__main__':
                 elif preference(P,W,i,j) == j and preference(P,W,j,i) == j:
                     n_preferred += 1
                 else:
+                    #print i,j
                     preferred += 1
                     n_preferred += 1        
             
             if preferred == N-1:
+                #print "Bargain: ",i
                 bargain += 1
             
             if n_preferred == N-1:
+                #print "Terrible Deal: ",i
                 t_deal += 1
                 
         #Process END
