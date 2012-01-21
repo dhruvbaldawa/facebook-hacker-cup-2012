@@ -20,11 +20,11 @@ Output T lines, one for each test case. For each case, output "Case #t: a b", wh
 
 Constraints
 1 <= T <= 20
-1 <= N <= 1018
-1 <= M, K <= 107
+1 <= N <= 10^18
+1 <= M, K <= 10^7
 1 <= P1 <= M
 1 <= W_1 <= K
-0 <= A,B,C,D <= 109
+0 <= A,B,C,D <= 10^9
 """
 import sys
 def preference(P, W, i, j):
@@ -39,6 +39,7 @@ def parse_file():
         yield line
     
 if __name__ == '__main__':
+
     index = -1
 
     for line in parse_file():
@@ -52,7 +53,7 @@ if __name__ == '__main__':
         N, P1, W1, M, K, A, B, C, D = (int(x) for x in line.split())
         P = [P1]
         W = [W1]
-        for i in range(1, N):
+        for i in xrange(1, N):
             P.append(((A*P[i-1] + B) % M) + 1)
             W.append(((C*W[i-1] + D) % K) + 1)
         
@@ -60,27 +61,29 @@ if __name__ == '__main__':
         t_deal = 0
         
         #print P, W
-        for i in range(N):
-            preferred = 0
-            n_preferred = 0
-            for j in range(N):
-                if i == j:
-                    continue
-                
+        preferred = [0]*N
+        n_preferred = [0]*N
+        for i in xrange(N):
+            for j in xrange(i+1,N):
+               
                 if preference(P,W,i,j) == i and preference(P,W,j,i) == i:
-                    preferred += 1
+                    preferred[i] += 1
+                    n_preferred[j] += 1
                 elif preference(P,W,i,j) == j and preference(P,W,j,i) == j:
-                    n_preferred += 1
+                    n_preferred[i] += 1
+                    preferred[j] += 1
                 else:
                     #print i,j
-                    preferred += 1
-                    n_preferred += 1        
+                    preferred[i] += 1
+                    n_preferred[i] += 1
+                    preferred[j] += 1
+                    n_preferred[j] += 1        
             
-            if preferred == N-1:
+            if preferred[i] == N-1:
                 #print "Bargain: ",i
                 bargain += 1
             
-            if n_preferred == N-1:
+            if n_preferred[i] == N-1:
                 #print "Terrible Deal: ",i
                 t_deal += 1
                 
