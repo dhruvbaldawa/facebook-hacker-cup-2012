@@ -27,6 +27,8 @@ Constraints
 0 <= A,B,C,D <= 10^9
 """
 import sys
+from collections import Counter
+import profile
 def preference(P, W, i, j):
     if (P[i] < P[j] and W[i] <= W[j]) or (P[i] <= P[j] and W[i] < W[j]):
         return i
@@ -53,19 +55,23 @@ if __name__ == '__main__':
         N, P1, W1, M, K, A, B, C, D = (int(x) for x in line.split())
         P = [P1]
         W = [W1]
-        for i in xrange(1, N):
-            P.append(((A*P[i-1] + B) % M) + 1)
-            W.append(((C*W[i-1] + D) % K) + 1)
-        
         bargain = 0
         t_deal = 0
         
         #print P, W
-        preferred = [0]*N
-        n_preferred = [0]*N
+        preferred = Counter()
+        n_preferred = Counter()
+        
         for i in xrange(N):
+            if i == 0:
+                P.append(((A*P[0] + B) % M) + 1)
+                W.append(((C*W[0] + D) % K) + 1)
+                
             for j in xrange(i+1,N):
-               
+                if i == 0:
+                    P.append(((A*P[j] + B) % M) + 1)
+                    W.append(((C*W[j] + D) % K) + 1)
+                
                 if preference(P,W,i,j) == i and preference(P,W,j,i) == i:
                     preferred[i] += 1
                     n_preferred[j] += 1
@@ -86,7 +92,7 @@ if __name__ == '__main__':
             if n_preferred[i] == N-1:
                 #print "Terrible Deal: ",i
                 t_deal += 1
-                
+        #print P, W
         #Process END
         index += 1
         print "Case #%s: %s %s" % (index, t_deal, bargain)
