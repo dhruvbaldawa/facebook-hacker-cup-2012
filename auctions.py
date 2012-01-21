@@ -27,6 +27,12 @@ Constraints
 0 <= A,B,C,D <= 109
 """
 import sys
+def preference(P, W, i, j):
+    if (P[i] < P[j] and W[i] >= W[j]) or (P[i] <= P[j] and W[i] < W[j]):
+        return i
+    else:
+        return j
+
 def parse_file():
     lines = open(sys.argv[1]).read()
     for line in lines.splitlines():
@@ -51,38 +57,32 @@ if __name__ == '__main__':
             P.append(((A*P[i-1] + B) % M) + 1)
             W.append(((C*W[i-1] + D) % K) + 1)
         
-        preferred = {}
-        print P, W
+        bargain = 0
+        t_deal = 0
+        
+        #print P, W
         for i in range(N):
+            preferred = 0
+            n_preferred = 0
             for j in range(N):
                 if i == j:
                     continue
-                if (P[i] < P[j] and W[i] >= W[j]) or (P[i] <= P[j] and W[i] < W[j]):
-                    preferred[(i, j)] = i
-                else:
-                    preferred[(i, j)] = j
-        
-        # Checking for bargain and t_deal
-        bargain = 0
-        t_deal = 0
-        for i in range(N):
-            breaked = False
-            t_breaked = False
-            
-            for x in preferred.iterkeys():
-                if i == x[0] and preferred[x] == i:
-                    t_breaked = True
                 
-                if i == x[0] and preferred[x] != i:
-                    breaked = True
+                if preference(P,W,i,j) == i and preference(P,W,j,i) == i:
+                    preferred += 1
+                elif preference(P,W,i,j) == j and preference(P,W,j,i) == j:
+                    n_preferred += 1
+                else:
+                    preferred += 1
+                    n_preferred += 1        
             
-            if not breaked:
+            if preferred == N-1:
                 bargain += 1
             
-            if not t_breaked:
+            if n_preferred == N-1:
                 t_deal += 1
                 
         #Process END
         index += 1
-        print "Case #%s: %s %s" % (index, bargain, t_deal)
+        print "Case #%s: %s %s" % (index, t_deal, bargain)
     pass
