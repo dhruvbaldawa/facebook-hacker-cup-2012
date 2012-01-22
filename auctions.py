@@ -35,6 +35,39 @@ def preference(P, W, i, j):
     else:
         return j
 
+def gcd(a,b):
+  if not b == 0:
+     return gcd(b,a%b)
+  else:
+     return a
+
+def lcm(a,b):
+  return a*(b/gcd(a,b))
+
+def get_period(N, P1, W1, M, K, A, B, C, D):
+    P = [P1]
+    W = [W1]
+    r_W = False
+    r_P = False
+    
+    k = max(M,K)
+    n = 1
+    while n < k:
+        P_t = (((A*P[n-1] + B) % M) + 1)
+        W_t = (((C*W[n-1] + D) % K) + 1)
+        if W_t == W1:
+            #print "W_t:",n
+            r_W = n
+        if P_t == P1:
+            #print "P_t:",n
+            r_P = n
+        if r_W and r_P:
+            k = lcm(r_W, r_P)+1 if k < N and N/k != 0 else N
+        P.append(P_t)
+        W.append(W_t)
+        n += 1               
+    return P,W,k
+
 def parse_file():
     lines = open(sys.argv[1]).read()
     for line in lines.splitlines():
@@ -53,25 +86,20 @@ if __name__ == '__main__':
         
         #Process
         N, P1, W1, M, K, A, B, C, D = (int(x) for x in line.split())
-        P = [P1]
-        W = [W1]
+        P, W, k = get_period(N, P1, W1, M, K, A, B, C, D)
+        print "Done. Get Period"
         bargain = 0
         t_deal = 0
-        
-        #print P, W
+        bargain_index = []
+        t_deal_index = []
+               
         preferred = Counter()
         n_preferred = Counter()
-        
-        for i in xrange(N):
-            if i == 0:
-                P.append(((A*P[0] + B) % M) + 1)
-                W.append(((C*W[0] + D) % K) + 1)
-                
-            for j in xrange(i+1,N):
-                if i == 0:
-                    P.append(((A*P[j] + B) % M) + 1)
-                    W.append(((C*W[j] + D) % K) + 1)
-                
+        k = min(N, k)
+        for i in xrange(k):
+            if i % 100000 == 0:
+                print i,"done"
+            for j in xrange(i+1,k):
                 if preference(P,W,i,j) == i and preference(P,W,j,i) == i:
                     preferred[i] += 1
                     n_preferred[j] += 1
@@ -85,14 +113,35 @@ if __name__ == '__main__':
                     preferred[j] += 1
                     n_preferred[j] += 1        
             
-            if preferred[i] == N-1:
+            if preferred[i] == k-1:
                 #print "Bargain: ",i
+                #raw_input("Continue...")
                 bargain += 1
+                bargain_index.append(i)
             
-            if n_preferred[i] == N-1:
+            if n_preferred[i] == k-1:
                 #print "Terrible Deal: ",i
+                #raw_input("Continue...")
                 t_deal += 1
-        #print P, W
+                t_deal_index.append(i)
+        
+        if k < N and N/k != 0:
+            t_deal *= N/k
+            bargain *= N/k
+        
+        for x in bargain_index:
+            if x < N%k:
+                bargain += 1
+            else:
+                break
+                
+        for x in t_deal_index:
+            if x < N%k:
+                t_deal += 1
+            else:
+                break
+        
+        #print P, W, k, preferred, n_preferred
         #Process END
         index += 1
         print "Case #%s: %s %s" % (index, t_deal, bargain)
