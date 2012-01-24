@@ -42,7 +42,7 @@ if __name__ == '__main__':
         min_ = c[sentence[0]]/d[sentence[0]]
         for letter in sentence:
             if c[letter]/d[letter] < min_:
-                min_ = c[letter]
+                min_ = c[letter]/d[letter]
         index += 1
         print "Case #%s: %s" % (index, min_)
     pass
