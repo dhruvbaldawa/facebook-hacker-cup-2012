@@ -79,15 +79,15 @@ if __name__ == '__main__':
 
     for line in parse_file():
         if index == -1:
-            T = int(line)
-            assert T > 1 and T <= 20
+            #T = int(line)
+            #assert T > 1 and T <= 20
             index += 1
             continue
         
         #Process
         N, P1, W1, M, K, A, B, C, D = (int(x) for x in line.split())
         P, W, k = get_period(N, P1, W1, M, K, A, B, C, D)
-        print "Done. Get Period"
+        #print "Done. Get Period"
         bargain = 0
         t_deal = 0
         bargain_index = []
@@ -97,8 +97,9 @@ if __name__ == '__main__':
         n_preferred = Counter()
         k = min(N, k)
         for i in xrange(k):
-            if i % 100000 == 0:
-                print i,"done"
+            #if i % 100000 == 0:
+            #    print i,"done"
+            
             for j in xrange(i+1,k):
                 if preference(P,W,i,j) == i and preference(P,W,j,i) == i:
                     preferred[i] += 1

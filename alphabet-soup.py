@@ -38,9 +38,10 @@ if __name__ == '__main__':
         assert len(sentence) >= 1 and len(sentence) <= 1000
         
         c = Counter(line)
-        min_ = c[sentence[0]]
+        d = Counter(sentence)
+        min_ = c[sentence[0]]/d[sentence[0]]
         for letter in sentence:
-            if c[letter] < min_:
+            if c[letter]/d[letter] < min_:
                 min_ = c[letter]
         index += 1
         print "Case #%s: %s" % (index, min_)
