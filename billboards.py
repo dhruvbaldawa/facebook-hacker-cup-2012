@@ -66,46 +66,7 @@ if __name__ == '__main__':
                 max_h = len(wrap)*f_width
                 if max_w <= w and max_h <= h:
                     sizes.append(f_width)
-        """
-        #font_width = w/len(s[0]
-        #max_font = font_width
-        max_line_w = w
-        max_font = 1
-        max_l = []
-        
-        for f_width in range(1, max_line_w):
-            l = []
-            line_width = w/f_width
-            space_left = line_width
-            
-            word_pointer = 0
-            line_pointer = 0
-            while True:
-                if word_pointer == len(s) or space_left < 0:
-                    break
-                
-                if len(s[word_pointer]) * f_width <= space_left:
-                    space_left -= len(s[word_pointer]) * f_width
-                    try:
-                        e = l.pop()
-                        l.append(e + " " + s[word_pointer])
-                        space_left -= f_width
-                    except:
-                        l.append(s[word_pointer])
-                    word_pointer += 1
-                
-                else:    
-                    space_left = line_width
-                            
-            max_w = len(max(l, key=len)) * f_width
-            max_h = len(l) * f_width
-            
-            if max_w <= w and max_h <= h:
-                max_font = f_width
-                max_l = l
-        
-        #Process end
-        """
+        # Process end
         index += 1
         print "Case #%s: %s" % (index, max(sizes))
     pass
